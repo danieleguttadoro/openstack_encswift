@@ -1,7 +1,9 @@
 # Swift client encryption 
 
 Encswift app can put encrypted files on swift. It introduces (optionally) the Over-Encryption, in order to avoid useless change on each file, after a policy change.
-In order to start this app you have to start `make run` in swift_browser_client and run `proxy.py` in proxy_server. Moreover, if Over-Encryption is activated, a particular version of Swift (encswift_server) has to run on the server. Doing a `vagrant up` in devstack-vagrant-enc folder, this modified version will be loaded.
+In order to start this app you have to start `make run` in swift_browser_client and run `proxy.py` in proxy_server. 
+
+Moreover, if Over-Encryption is activated, a particular version of Swift (encswift_server) has to run on the server. Doing a `vagrant up` in devstack-vagrant-enc folder, this modified version will be loaded.
 
 # Branches
 Stable release is in branch __master__
