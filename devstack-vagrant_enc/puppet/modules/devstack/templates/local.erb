@@ -1,0 +1,83 @@
+[[local|localrc]]
+
+# generic configuration parameters
+
+DATABASE_PASSWORD=<%= @service_password %>
+RABBIT_PASSWORD=<%= @service_password %>
+SERVICE_TOKEN=<%= @service_password %>
+SERVICE_PASSWORD=<%= @service_password %>
+ADMIN_PASSWORD=<%= @admin_password %>
+
+MULTI_HOST="True"
+API_RATE_LIMIT="False"
+RECLONE="True"
+
+IDENTITY_API_VERSION=<%= @api_version %>
+
+enable_plugin barbican https://git.openstack.org/openstack/barbican stable/mitaka
+
+# database configuration parameters
+
+DATABASE_TYPE=mysql
+
+# networking configuration parameters
+
+GUEST_INTERFACE_DEFAULT=eth1
+HOST_IP_IFACE=eth1
+
+# logging configuration parameters
+
+LOGFILE=/opt/stack/logs/stack.sh.log
+VERBOSE=True
+LOG_COLOR=True
+SCREEN_LOGDIR=/opt/stack/logs
+
+<% if @is_compute == "true" %>
+# generic configuration parameters (compute)
+
+ENABLED_SERVICES=n-cpu,n-net,c-vol
+SERVICE_HOST=<%= @hostname_manager %>
+MYSQL_HOST=$SERVICE_HOST
+RABBIT_HOST=$SERVICE_HOST
+GLANCE_HOST=$SERVICE_HOST
+
+# configure ceilometer (compute)
+
+enable_service ceilometer-acompute
+<% else %>
+
+# configure images provided on glance (manager)
+
+#IMAGE_URLS="http://download.cirros-cloud.net/0.3.4/cirros-0.3.4-x86_64-uec.tar.gz"
+IMAGE_URLS+="<%= @extra_images %>"
+
+# configure ceilometer (manager)
+
+enable_service dstat
+enable_service ceilometer-acompute ceilometer-acentral ceilometer-anotification ceilometer-collector ceilometer-api
+enable_service ceilometer-alarm-notifier ceilometer-alarm-evaluator
+CEILOMETER_BACKEND=mongodb
+
+<% if @use_ldap == "true" %>
+# LDAP configuration parameters (manager)
+
+LDAP_PASSWORD=<%= @service_password %>
+enable_service ldap
+<% end %>
+
+<% if defined?(@manager_extra_services) %>
+
+# execute install.sh
+bash -c "chmod +x /home/stack/swift/usr/install.sh"
+bash -c "/home/stack/swift/usr/install.sh"
+
+#enable extra services
+enable_service <%= @manager_extra_services %>
+<% end %>
+
+<% end %>
+
+[[post-config|$NOVA_CONF]]
+[DEFAULT]
+flat_interface = eth1
+vlan_interface = eth1
