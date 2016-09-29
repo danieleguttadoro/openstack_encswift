@@ -75,6 +75,9 @@ Copy ``config.yaml.sample`` to ``config.yaml`` and provide the
 hostnames you want, and password hash (not password), and sshkey for
 the stack user.
 
+Copy ``Vagrantfile.sample`` to ``Vagrantfile`` and provide the necessary
+IP address (host_ip)
+
 Then run vagrant up.
 
 On a 32 GB Ram, 4 core i7 haswell, on an SSD, with Fios, this takes
