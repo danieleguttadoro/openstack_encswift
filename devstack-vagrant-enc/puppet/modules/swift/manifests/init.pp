@@ -3,11 +3,11 @@
 
 class swift
 {
-  $source = 'https://github.com/danieleguttadoro/ovencswiftserver_onthefly.git'
+  $source = 'https://github.com/danieleguttadoro/openstack_encswift/tree/master/encswift_server.git'
   $devstack_dir = '/home/stack/devstack'
   $swift_dir = '/home/stack/swift'
   $user = $user::stack::username
-  $branch = 'barbican'
+  #$branch = 'barbican'
 
   exec { 'swift_clone':
     require => [
@@ -18,7 +18,7 @@ class swift
     environment => "HOME=/home/$user",
     user => 'stack',
     group => 'stack',
-    command => "/usr/local/bin/git_clone.sh ${source} ${branch} ${swift_dir}",
+    command => "/usr/local/bin/git_clone.sh ${source} ${swift_dir}",
     logoutput => true,
     timeout => 1200,
   }
